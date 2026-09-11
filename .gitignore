@@ -1,0 +1,58 @@
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
+develop-eggs/
+dist/
+build/
+
+# Audio / Media Outputs
+output/*
+!output/.gitkeep
+*.mp3
+*.wav
+*.ogg
+*.aac
+*.m4a
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.temp
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

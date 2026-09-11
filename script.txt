@@ -1,0 +1,3 @@
+Welcome to this lesson on Machine Learning Fundamentals. 
+In this module, we will explore the core concepts of supervised and unsupervised learning, and how to build intelligent workflows from scratch. 
+Let's get started!

@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_SCRIPT_FILE = BASE_DIR / "script.txt"
 DEFAULT_OUTPUT_DIR = BASE_DIR / "output"
 DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_DIR / "speech.mp3"
+CLEAN_OUTPUT_ON_RUN = True  # Automatically clean old audio files before generating new ones
 
 # Voice Settings
 # Default: High-quality natural neural voice

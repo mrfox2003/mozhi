@@ -11,6 +11,7 @@ from config import (
     DEFAULT_PITCH,
     DEFAULT_VOLUME,
     PRESET_VOICES,
+    CLEAN_OUTPUT_ON_RUN,
 )
 from tts_engine import generate_from_file, list_voices, resolve_voice
 
@@ -49,6 +50,7 @@ def run_conversion(
     rate: str,
     pitch: str,
     volume: str,
+    clean_output: bool = CLEAN_OUTPUT_ON_RUN,
 ) -> bool:
     """Execute text-to-speech conversion for a file (supporting sections)."""
     try:
@@ -65,6 +67,7 @@ def run_conversion(
             rate=rate,
             pitch=pitch,
             volume=volume,
+            clean_output=clean_output,
         )
 
         elapsed = time.time() - start_time
@@ -86,6 +89,7 @@ def run_watch_mode(
     rate: str,
     pitch: str,
     volume: str,
+    clean_output: bool = True,
 ):
     """Watch script file for changes and regenerate audio on save."""
     print(f"Watching '{input_file}' for changes (Press Ctrl+C to stop)...")
@@ -93,7 +97,7 @@ def run_watch_mode(
 
     if input_file.exists():
         last_mtime = input_file.stat().st_mtime
-        run_conversion(input_file, output_file, voice, rate, pitch, volume)
+        run_conversion(input_file, output_file, voice, rate, pitch, volume, clean_output=clean_output)
 
     try:
         while True:
@@ -104,7 +108,7 @@ def run_watch_mode(
             if last_mtime is None or current_mtime != last_mtime:
                 last_mtime = current_mtime
                 print(f"\nChange detected in {input_file.name}!")
-                run_conversion(input_file, output_file, voice, rate, pitch, volume)
+                run_conversion(input_file, output_file, voice, rate, pitch, volume, clean_output=clean_output)
     except KeyboardInterrupt:
         print("\nWatch mode stopped.")
 
@@ -170,6 +174,11 @@ def main():
         action="store_true",
         help="Show quick preset voice aliases",
     )
+    parser.add_argument(
+        "--no-clean",
+        action="store_true",
+        help="Do not delete existing audio files in output directory before generation",
+    )
 
     args = parser.parse_args()
 
@@ -181,6 +190,8 @@ def main():
         print_voice_list(args.lang)
         return
 
+    clean_flag = not args.no_clean
+
     if args.watch:
         run_watch_mode(
             input_file=args.file,
@@ -189,6 +200,7 @@ def main():
             rate=args.rate,
             pitch=args.pitch,
             volume=args.volume,
+            clean_output=clean_flag,
         )
     else:
         success = run_conversion(
@@ -198,6 +210,7 @@ def main():
             rate=args.rate,
             pitch=args.pitch,
             volume=args.volume,
+            clean_output=clean_flag,
         )
         if not success:
             sys.exit(1)

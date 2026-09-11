@@ -18,6 +18,21 @@ def resolve_voice(voice_or_preset: str) -> str:
     return PRESET_VOICES.get(voice_or_preset.lower(), voice_or_preset)
 
 
+def clean_output_directory(output_dir: Path) -> int:
+    """Remove old generated audio files from the output directory, preserving non-audio files."""
+    count = 0
+    dir_path = Path(output_dir)
+    if dir_path.exists() and dir_path.is_dir():
+        for file_path in dir_path.iterdir():
+            if file_path.is_file() and file_path.suffix.lower() in [".mp3", ".wav", ".ogg", ".aac", ".m4a"]:
+                try:
+                    file_path.unlink()
+                    count += 1
+                except OSError:
+                    pass
+    return count
+
+
 def sanitize_filename(name: str) -> str:
     """Sanitize section name for safe filename creation."""
     clean = re.sub(r'[\\/*?:"<>|]', "", name).strip()
@@ -159,6 +174,7 @@ def generate_from_file(
     rate: str = DEFAULT_RATE,
     pitch: str = DEFAULT_PITCH,
     volume: str = DEFAULT_VOLUME,
+    clean_output: bool = True,
 ) -> List[Path]:
     """
     Read script file, automatically detect sections, and synthesize speech.
@@ -174,10 +190,15 @@ def generate_from_file(
     if not sections:
         raise ValueError("Script is empty. Please add text to generate speech.")
 
-    # If target is a directory or if multiple sections exist
     output_target = Path(output_target)
+    out_dir = output_target if output_target.is_dir() or output_target.suffix == "" else output_target.parent
+
+    # Clean old audio files before generating new ones
+    if clean_output and out_dir.exists():
+        clean_output_directory(out_dir)
+
+    # If single section and specific mp3 output file was requested
     if len(sections) == 1 and not output_target.is_dir() and output_target.suffix.lower() == ".mp3":
-        # Single section and specific mp3 output requested
         path = generate_speech(
             text=sections[0][1],
             output_path=output_target,
@@ -188,7 +209,6 @@ def generate_from_file(
         )
         return [path]
 
-    out_dir = output_target if output_target.is_dir() or output_target.suffix == "" else output_target.parent
     return asyncio.run(
         synthesize_sections_async(
             sections=sections,

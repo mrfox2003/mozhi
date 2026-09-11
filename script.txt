@@ -1,3 +1,8 @@
-Welcome to this lesson on Machine Learning Fundamentals. 
-In this module, we will explore the core concepts of supervised and unsupervised learning, and how to build intelligent workflows from scratch. 
-Let's get started!
+# 01_Introduction
+Hello and welcome. My name is Niranjan, and I am excited to guide you through this learning journey. In this program, we will break down complex concepts into simple, actionable steps.
+
+# 02_Machine_Learning_Basics
+In this module, we explore the core foundations of Machine Learning. We will examine how models learn patterns from data, discuss the differences between supervised and unsupervised learning, and build our first predictive pipeline.
+
+# 03_Next_Steps
+By the end of this session, you will have a solid understanding of how intelligent systems work in the real world. Let's jump right in.

@@ -50,18 +50,17 @@ def run_conversion(
     pitch: str,
     volume: str,
 ) -> bool:
-    """Execute text-to-speech conversion for a file."""
+    """Execute text-to-speech conversion for a file (supporting sections)."""
     try:
         resolved = resolve_voice(voice)
         start_time = time.time()
         print(f"Reading: {input_file}")
         print(f"Voice  : {resolved}")
         print(f"Rate   : {rate}")
-        print("Generating audio...")
 
-        out_path = generate_from_file(
+        generated_files = generate_from_file(
             input_file=input_file,
-            output_path=output_file,
+            output_target=output_file,
             voice=resolved,
             rate=rate,
             pitch=pitch,
@@ -69,8 +68,11 @@ def run_conversion(
         )
 
         elapsed = time.time() - start_time
-        size_kb = out_path.stat().st_size / 1024
-        print(f"SUCCESS: Audio saved to {out_path} ({size_kb:.1f} KB in {elapsed:.2f}s)\n")
+        print(f"\nGenerated {len(generated_files)} audio file(s) in {elapsed:.2f}s:")
+        for path in generated_files:
+            size_kb = path.stat().st_size / 1024
+            print(f"  ✓ {path.name} -> {path} ({size_kb:.1f} KB)")
+        print()
         return True
     except Exception as e:
         print(f"ERROR: {e}\n", file=sys.stderr)

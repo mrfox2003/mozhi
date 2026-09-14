@@ -33,6 +33,9 @@ PRESET_VOICES = {
     # English - UK
     "uk-female": "en-GB-SoniaNeural",
     "uk-male": "en-GB-RyanNeural",
+    "uk-libby": "en-GB-LibbyNeural",
+    "uk-maisie": "en-GB-MaisieNeural",
+    "uk-thomas": "en-GB-ThomasNeural",
     
     # Tamil (Mozhi)
     "ta-female": "ta-IN-PallaviNeural",

@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-ground: #0a0807;
+  --bg-surface-1: #13100e;
+  --bg-surface-2: #1a1410;
+  --bg-surface-3: #271f17;
+  --bg-surface-elevated: #3c3125;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-warm: rgba(60, 49, 37, 0.7);
+  --border-focus: rgba(237, 112, 2, 0.6);
+  --text-primary: #fbfbfc;
+  --text-secondary: #a89f91;
+  --text-muted: #73685c;
+  --accent-primary: #ed7002;
+  --accent-primary-hover: #f97316;
+  --accent-cyan: #38bdf8;
+  --accent-green: #10b981;
+  --accent-amber: #f59e0b;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-ground);
+  color: var(--text-primary);
+  font-family: 'Google Sans', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+}
+
+/* Custom scrollbar with warm tint */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(237, 112, 2, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(237, 112, 2, 0.3);
+}
+
+/* Selection highlight */
+::selection {
+  background: rgba(237, 112, 2, 0.35);
+  color: #fff;
+}
+
+/* Focus outline reset */
+*:focus {
+  outline: none;
+}
+
+/* Line-numbered editor */
+.mozhi-editor {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.mozhi-editor::selection {
+  background: rgba(237, 112, 2, 0.3);
+}
+
+/* Equalizer bars */
+@keyframes eq-bounce {
+  0%,
+  100% {
+    height: 20%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+.eq-bar {
+  animation: eq-bounce 0.6s ease-in-out infinite;
+}
+
+/* Gradient text for brand */
+.brand-gradient {
+  background: linear-gradient(135deg, #ed7002 0%, #ff9138 50%, #facc15 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer effect for generating state */
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(237, 112, 2, 0.05) 0%,
+    rgba(237, 112, 2, 0.18) 50%,
+    rgba(237, 112, 2, 0.05) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* Glowing button accent */
+.glow-orange {
+  box-shadow: 0 0 20px rgba(237, 112, 2, 0.45), 0 0 40px rgba(237, 112, 2, 0.18);
+}
+
+/* Range slider styling */
+input[type='range'].mozhi-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+input[type='range'].mozhi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: 2px solid var(--bg-surface-2);
+  box-shadow: 0 0 8px rgba(237, 112, 2, 0.6);
+}
+input[type='range'].mozhi-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: 2px solid var(--bg-surface-2);
+}
+
+/* Subtle inner glow on cards */
+.card-glow {
+  box-shadow: inset 0 1px 0 rgba(237, 112, 2, 0.08), 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Ambient Mesh Glow */
+.ambient-glow {
+  background-color: #0a0807;
+  background-image: 
+    radial-gradient(at 12% 10%, rgba(237, 112, 2, 0.12) 0px, transparent 42%),
+    radial-gradient(at 88% 88%, rgba(255, 145, 56, 0.08) 0px, transparent 45%),
+    radial-gradient(at 50% 45%, rgba(237, 112, 2, 0.04) 0px, transparent 55%);
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: rgba(26, 20, 16, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(60, 49, 37, 0.7);
+}
+
+.glass-header {
+  background: rgba(10, 8, 7, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Organic Breathing Logo Animation */
+@keyframes logo-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(237, 112, 2, 0.25), inset 0 0 6px rgba(237, 112, 2, 0.05);
+    border-color: rgba(60, 49, 37, 0.8);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 20px rgba(237, 112, 2, 0.55), 0 0 35px rgba(237, 112, 2, 0.2), inset 0 0 12px rgba(237, 112, 2, 0.15);
+    border-color: rgba(237, 112, 2, 0.65);
+  }
+}
+
+@keyframes mark-breathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(237, 112, 2, 0.45));
+    transform: scale(1.08);
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(237, 112, 2, 0.85));
+    transform: scale(1.14);
+  }
+}
+
+.logo-breathe {
+  animation: logo-breathe 3.5s ease-in-out infinite;
+}
+
+.mark-breathe {
+  animation: mark-breathe 3.5s ease-in-out infinite;
+}
+

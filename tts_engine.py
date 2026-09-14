@@ -42,16 +42,7 @@ def sanitize_filename(name: str) -> str:
 def parse_script_sections(content: str) -> List[Tuple[str, str]]:
     """
     Parse a script into named sections delimited by lines starting with '# <name>'.
-    
-    Example:
-        # Intro
-        Hello everyone.
-        
-        # Basics
-        Let's cover the basics.
-        
-    Returns:
-        List of tuples: [(section_name, section_text), ...]
+    If a section header has no body text, the header title itself is used as the spoken text.
     """
     lines = content.splitlines()
     sections: List[Tuple[str, str]] = []
@@ -62,9 +53,11 @@ def parse_script_sections(content: str) -> List[Tuple[str, str]]:
         stripped = line.strip()
         # Check if line starts with header marker '#'
         if stripped.startswith("#"):
-            # Header found - save previous section if it had content
-            if current_buffer and (current_name or any(current_buffer)):
+            # Header found - save previous section if it had content or title
+            if current_name or any(current_buffer):
                 text = "\n".join(current_buffer).strip()
+                if not text and current_name:
+                    text = current_name
                 if text:
                     sec_name = current_name if current_name else "intro"
                     sections.append((sanitize_filename(sec_name), text))
@@ -77,8 +70,10 @@ def parse_script_sections(content: str) -> List[Tuple[str, str]]:
             current_buffer.append(line)
 
     # Flush last section
-    if current_buffer:
+    if current_name or any(current_buffer):
         text = "\n".join(current_buffer).strip()
+        if not text and current_name:
+            text = current_name
         if text:
             sec_name = current_name if current_name else "speech"
             sections.append((sanitize_filename(sec_name), text))
@@ -88,6 +83,34 @@ def parse_script_sections(content: str) -> List[Tuple[str, str]]:
         sections.append(("speech", content.strip()))
 
     return sections
+
+
+async def synthesize_speech_bytes_async(
+    text: str,
+    voice: str = DEFAULT_VOICE,
+    rate: str = DEFAULT_RATE,
+    pitch: str = DEFAULT_PITCH,
+    volume: str = DEFAULT_VOLUME,
+) -> bytes:
+    """Generate in-memory MP3 audio bytes directly from input text (zero disk I/O)."""
+    clean_text = text.strip()
+    if not clean_text:
+        raise ValueError("Script is empty. Please add text to generate speech.")
+
+    resolved_voice = resolve_voice(voice)
+    communicate = edge_tts.Communicate(
+        text=clean_text,
+        voice=resolved_voice,
+        rate=rate,
+        pitch=pitch,
+        volume=volume,
+    )
+    import io
+    audio_buffer = io.BytesIO()
+    async for chunk in communicate.stream():
+        if chunk["type"] == "audio":
+            audio_buffer.write(chunk["data"])
+    return audio_buffer.getvalue()
 
 
 async def synthesize_speech_async(

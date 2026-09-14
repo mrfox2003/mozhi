@@ -105,12 +105,15 @@ function App() {
   }, []);
 
   const handleGenerate = useCallback(
-    async (voiceOverride?: string) => {
+    async (voiceOverride?: unknown) => {
       if (script.trim().length === 0 || parseResult.totalSections === 0) {
         showToast('Please enter at least one slide section with # Slide_Name', 'info');
         return;
       }
-      const voiceToUse = voiceOverride || selectedVoice;
+      const voiceToUse =
+        typeof voiceOverride === 'string' && voiceOverride.trim().length > 0
+          ? voiceOverride.trim()
+          : selectedVoice;
       setGenerationStatus('generating');
       setGenerationProgress({ current: 0, total: parseResult.totalSections });
       setPlayingIndex(null);
@@ -308,7 +311,7 @@ function App() {
         onVoiceChange={handleVoiceChangeRequest}
         selectedSpeed={selectedSpeed}
         onSpeedChange={setSelectedSpeed}
-        onGenerate={handleGenerate}
+        onGenerate={() => handleGenerate()}
         generationStatus={generationStatus}
         generationProgress={generationProgress}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}

@@ -506,7 +506,7 @@ export function StudioHeader({
         )}
 
         <button
-          onClick={onGenerate}
+          onClick={() => onGenerate()}
           disabled={isGenerating}
           className={`relative group inline-flex items-center justify-center gap-2 h-9 px-4 rounded-xl text-xs font-semibold tracking-tight transition-all duration-150 shrink-0 select-none ${
             isGenerating

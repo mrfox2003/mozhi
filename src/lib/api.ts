@@ -49,6 +49,14 @@ export async function synthesizeSlideBlob(
   recommendedTimelineSec: number;
   voiceUsed?: string;
 }> {
+  const payload = {
+    text: typeof text === 'string' ? text : String(text || ''),
+    voice: typeof voice === 'string' && voice.trim().length > 0 ? voice.trim() : 'en-US-JennyNeural',
+    rate: typeof rate === 'string' && rate.trim().length > 0 ? rate.trim() : '+0%',
+    pitch: typeof pitch === 'string' ? pitch : '+0Hz',
+    volume: typeof volume === 'string' ? volume : '+0%',
+  };
+
   const res = await fetch(`${API_BASE}/api/tts`, {
     method: 'POST',
     headers: {
@@ -56,7 +64,7 @@ export async function synthesizeSlideBlob(
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
     },
-    body: JSON.stringify({ text, voice, rate, pitch, volume }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
